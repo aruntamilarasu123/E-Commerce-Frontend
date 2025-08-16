@@ -20,7 +20,7 @@ import ResetPassword from './components/ResetPassword';
 import UserProfile from './pages/UserProfile';
 import SalesReport from './pages/SalesReport';
 import Footer from './components/Footer';
-import WishList from './pages/WishList';
+import WishList from './pages/Wishlist';
 
 function App() {
   const location = useLocation();

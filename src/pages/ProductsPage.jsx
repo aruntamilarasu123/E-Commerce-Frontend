@@ -54,17 +54,9 @@ function ProductsPage() {
   const userId = getCurrentUserId();
   const filteredData = data?.filter((product) => product.seller?._id === userId);
 
-  const handlePrev = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
-  };
-
-  const handleNext = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  };
-
-  const handlePageClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const handlePageClick = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="p-4 sm:p-6 md:p-8 bg-gray-50 min-h-screen">
@@ -81,7 +73,7 @@ function ProductsPage() {
         </button>
       </div>
 
-      {/* Table */}
+      {/* Desktop Table */}
       <div className="hidden md:block overflow-x-auto bg-white shadow rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
@@ -96,7 +88,7 @@ function ProductsPage() {
           <tbody className="bg-white divide-y divide-gray-100">
             {loading ? (
               <tr>
-                <td colSpan="4" className="px-4 py-5 text-center text-gray-500">
+                <td colSpan="5" className="px-4 py-5 text-center text-gray-500">
                   Loading products...
                 </td>
               </tr>
@@ -127,7 +119,7 @@ function ProductsPage() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="px-4 py-5 text-center text-gray-500 text-sm">
+                <td colSpan="5" className="px-4 py-5 text-center text-gray-500 text-sm">
                   No products found for this user.
                 </td>
               </tr>
@@ -136,9 +128,46 @@ function ProductsPage() {
         </table>
       </div>
 
-      {/* Pagination (same as Home) */}
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-4">
+        {loading ? (
+          <p className="text-center text-gray-500">Loading products...</p>
+        ) : filteredData?.length > 0 ? (
+          filteredData.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white border border-gray-200 rounded-lg shadow-md p-4 flex flex-col gap-2"
+            >
+              <div className="flex justify-between items-center">
+                <h3 className="text-gray-800 font-semibold">{product.name}</h3>
+                <span className="text-gray-500 text-sm">{product.category}</span>
+              </div>
+              <p className="text-gray-700 text-sm">Stock: {product.stock}</p>
+              <p className="text-gray-800 font-medium">Price: ₹{product.price.toFixed(2)}</p>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => handleEdit(product)}
+                  className="flex-1 px-3 py-1 text-sm text-white bg-green-600 hover:bg-green-700 rounded-md transition"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(product._id)}
+                  className="flex-1 px-3 py-1 text-sm text-white bg-red-600 hover:bg-red-700 rounded-md transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No products found for this user.</p>
+        )}
+      </div>
+
+      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-8">
+        <div className="flex justify-center items-center gap-2 mt-6 flex-wrap">
           <button
             onClick={handlePrev}
             disabled={currentPage === 1}
@@ -150,7 +179,6 @@ function ProductsPage() {
           >
             Prev
           </button>
-
           {Array.from({ length: totalPages }, (_, idx) => (
             <button
               key={idx + 1}
@@ -164,7 +192,6 @@ function ProductsPage() {
               {idx + 1}
             </button>
           ))}
-
           <button
             onClick={handleNext}
             disabled={currentPage === totalPages}

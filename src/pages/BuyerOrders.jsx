@@ -128,7 +128,7 @@ function BuyerOrders() {
                   <td className="px-4 py-3 text-sm flex items-center gap-2">{renderStatusBadge(order.status)}</td>
                   <td className="px-4 py-3 text-sm">
                     {order.items.map((item, idx) => (
-                      <p key={idx}>{item.product.name} x {item.quantity}</p>
+                      <p key={idx}>{item.product?.name || 'Deleted Product'} x {item.quantity}</p>
                     ))}
                   </td>
                   <td className="px-4 py-3 text-sm font-semibold text-gray-800">₹{totalPrice.toFixed(2)}</td>
@@ -187,7 +187,9 @@ function BuyerOrders() {
               <div className="mt-2 text-sm text-gray-600">
                 <p className="font-medium">Items:</p>
                 {order.items.map((item, idx) => (
-                  <p key={idx}>{item.product.name} x {item.quantity} = ₹{(item.price * item.quantity).toFixed(2)}</p>
+                  <p key={idx}>
+                    {item.product?.name || 'Deleted Product'} x {item.quantity} = ₹{(item.price * item.quantity).toFixed(2)}
+                  </p>
                 ))}
               </div>
               <p className="font-semibold text-gray-800 mt-2 text-right">Total: ₹{totalPrice.toFixed(2)}</p>

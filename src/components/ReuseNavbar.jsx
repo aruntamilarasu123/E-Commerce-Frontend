@@ -10,9 +10,8 @@ const ReuseNavbar = () => {
   const { fetchProducts } = useContext(MyContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // ✅ NEW: filter state
   const [filterOpen, setFilterOpen] = useState(false);
+
   const [category, setCategory] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -22,21 +21,16 @@ const ReuseNavbar = () => {
   const name = localStorage.getItem("userName");
   const role = localStorage.getItem("role");
 
-  // Clear localStorage on home page
   useEffect(() => {
-    if (path === "/") {
-      localStorage.clear();
-    }
+    if (path === "/") localStorage.clear();
   }, [path]);
 
-  // Determine page type
   const isHome = path === "/";
   const isBuyerRelated = path === "/buyer" || path.startsWith("/buyer/");
   const isSellerRelated = path === "/seller" || path.startsWith("/seller/");
   const isSingleProduct =
     path.startsWith("/buyer/product/") || path.startsWith("/seller/product/");
 
-  // Navbar visibility flags
   const showSearchBar = isHome || isBuyerRelated;
   const showLoginSignup = isHome || isSingleProduct;
   const showUserButtons = isBuyerRelated || isSellerRelated;
@@ -55,7 +49,6 @@ const ReuseNavbar = () => {
     }
   };
 
-  // ✅ NEW: Apply filters
   const handleFilterApply = () => {
     fetchProducts({
       category,
@@ -66,12 +59,15 @@ const ReuseNavbar = () => {
       limit: 8,
     });
     setFilterOpen(false);
+    setMobileMenuOpen(false); // close mobile menu on apply
   };
 
-  const NavButtons = () => (
+  const NavButtons = ({ isMobile }) => (
     <>
       {showUserButtons && (
-        <div className="flex flex-col md:flex-row md:items-center md:gap-4">
+        <div
+          className={`flex flex-col ${isMobile ? "gap-2" : "md:flex-row md:gap-4"} `}
+        >
           {showCartAndOrder && (
             <>
               <Link to="/buyer/wishlist" className="nav-link">
@@ -96,24 +92,24 @@ const ReuseNavbar = () => {
             </Link>
           )}
 
-          {/* Profile Dropdown */}
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="text-2xl text-gray-600 hover:text-[#ff7f00] focus:outline-none ml-0 md:ml-3"
+              className="text-2xl text-gray-600 hover:text-[#ff7f00] focus:outline-none"
             >
               <FaUserCircle />
             </button>
-
             {dropdownOpen && (
               <div
-                className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-2 z-50"
-                onMouseLeave={() => setDropdownOpen(false)}
+                className={`absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-2 z-50 ${
+                  isMobile ? "relative mt-0" : ""
+                }`}
               >
                 <div
                   onClick={() => {
                     navigate(`/${role}/user-profile`);
                     setDropdownOpen(false);
+                    setMobileMenuOpen(false);
                   }}
                   className="cursor-pointer px-4 py-2 text-sm text-gray-800 font-medium border-b hover:bg-gray-100"
                 >
@@ -122,6 +118,7 @@ const ReuseNavbar = () => {
                 <Link
                   to={`/${role}/change-password`}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Change Password
                 </Link>
@@ -138,16 +135,18 @@ const ReuseNavbar = () => {
       )}
 
       {showLoginSignup && (
-        <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+        <div className={`flex flex-col ${isMobile ? "gap-2" : "md:flex-row md:gap-3"}`}>
           <Link
             to="/login"
             className="px-4 py-2 bg-[#ff7f00] hover:bg-orange-600 text-white font-semibold rounded-md shadow-sm text-center"
+            onClick={() => isMobile && setMobileMenuOpen(false)}
           >
             Login
           </Link>
           <Link
             to="/signup"
             className="px-4 py-2 bg-[#ff7f00] hover:bg-orange-600 text-white font-semibold rounded-md shadow-sm text-center"
+            onClick={() => isMobile && setMobileMenuOpen(false)}
           >
             Signup
           </Link>
@@ -166,17 +165,13 @@ const ReuseNavbar = () => {
             alt="Arindra Logo"
             className="w-10 h-10 object-cover rounded-xl shadow-md"
           />
-          <h1 className="text-2xl font-bold text-[#ff7f00] tracking-tight">
-            Arindra
-          </h1>
+          <h1 className="text-2xl font-bold text-[#ff7f00] tracking-tight">Arindra</h1>
         </div>
 
-        {/* Search + Filter (Desktop) */}
+        {/* Desktop Search + Filter */}
         {showSearchBar && (
           <div className="hidden md:flex items-center gap-3 w-1/2">
             <SearchBox onSearch={handleSearch} />
-
-            {/* ✅ NEW Filter Button */}
             <button
               onClick={() => setFilterOpen(!filterOpen)}
               className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md"
@@ -201,21 +196,79 @@ const ReuseNavbar = () => {
         </button>
       </div>
 
-      {/* ✅ NEW Filter Dropdown */}
-      {filterOpen && (
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden px-4 pb-4 flex flex-col gap-3 bg-white border-t border-gray-200 shadow-md">
+          {showSearchBar && <SearchBox onSearch={handleSearch} />}
+          <NavButtons isMobile={true} />
+
+          {/* Mobile Filter Dropdown */}
+          <button
+            onClick={() => setFilterOpen(!filterOpen)}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md mt-2"
+          >
+            <FaFilter />
+            <span>Filter</span>
+          </button>
+          {filterOpen && (
+            <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 mt-2">
+              <h3 className="text-lg font-semibold mb-3">Filters</h3>
+              <input
+                type="text"
+                placeholder="Category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full border rounded-md px-2 py-1 mb-2"
+              />
+              <div className="flex gap-2 mb-2">
+                <input
+                  type="number"
+                  placeholder="Min Price"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  className="w-1/2 border rounded-md px-2 py-1"
+                />
+                <input
+                  type="number"
+                  placeholder="Max Price"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  className="w-1/2 border rounded-md px-2 py-1"
+                />
+              </div>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="w-full border rounded-md px-2 py-1 mb-3"
+              >
+                <option value="">Default</option>
+                <option value="priceLowHigh">Price: Low → High</option>
+                <option value="priceHighLow">Price: High → Low</option>
+                <option value="newest">Newest</option>
+              </select>
+              <button
+                onClick={handleFilterApply}
+                className="w-full bg-[#ff7f00] hover:bg-orange-600 text-white font-semibold py-2 rounded-md"
+              >
+                Apply
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Desktop Filter Dropdown */}
+      {filterOpen && !mobileMenuOpen && (
         <div className="absolute right-10 top-16 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
           <h3 className="text-lg font-semibold mb-3">Filters</h3>
-
-          <label className="block text-sm font-medium">Category</label>
           <input
             type="text"
-            placeholder="e.g. Electronics"
+            placeholder="Category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="w-full border rounded-md px-2 py-1 mb-2"
           />
-
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-2">
             <input
               type="number"
               placeholder="Min Price"
@@ -231,8 +284,6 @@ const ReuseNavbar = () => {
               className="w-1/2 border rounded-md px-2 py-1"
             />
           </div>
-
-          <label className="block text-sm font-medium mt-2">Sort</label>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
@@ -243,26 +294,11 @@ const ReuseNavbar = () => {
             <option value="priceHighLow">Price: High → Low</option>
             <option value="newest">Newest</option>
           </select>
-
           <button
             onClick={handleFilterApply}
             className="w-full bg-[#ff7f00] hover:bg-orange-600 text-white font-semibold py-2 rounded-md"
           >
             Apply
-          </button>
-        </div>
-      )}
-
-      {/* Mobile Search + Filter */}
-      {showSearchBar && mobileMenuOpen && (
-        <div className="md:hidden px-4 pb-3 flex flex-col gap-3">
-          <SearchBox onSearch={handleSearch} />
-          <button
-            onClick={() => setFilterOpen(!filterOpen)}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md"
-          >
-            <FaFilter />
-            <span>Filter</span>
           </button>
         </div>
       )}

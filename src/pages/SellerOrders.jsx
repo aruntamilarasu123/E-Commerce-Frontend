@@ -49,7 +49,6 @@ function SellerOrders() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
-      console.log("Orders response:", response.data);
 
       // backend sends array directly, not { orders: [...] }
       setOrders(Array.isArray(response.data) ? response.data : []);

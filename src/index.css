@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+.input-style {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200;
+}
+
+.input {
+  @apply w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+@layer components {
+  /* Primary Button */
+  .btn-primary {
+    @apply px-4 py-2 text-sm md:text-base font-semibold text-white bg-[#ff7f00] hover:bg-orange-600 rounded-md shadow-sm transition;
+  }
+
+  /* Navigation Links */
+  .nav-link {
+    @apply text-sm md:text-base text-gray-700 hover:text-[#ff7f00] transition font-medium;
+  }
+
+  /* Input Styles */
+  .input-style {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff7f00] focus:border-[#ff7f00];
+  }
+}

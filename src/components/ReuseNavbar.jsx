@@ -162,7 +162,7 @@ const ReuseNavbar = () => {
         {/* Logo */}
         <div className="flex items-center gap-3">
           <img
-            src="/src/assets/Cart2.png"
+            src="/Cart2.png"
             alt="Arindra Logo"
             className="w-10 h-10 object-cover rounded-xl shadow-md"
           />

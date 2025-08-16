@@ -18,9 +18,9 @@ import ChangePassword from './components/ChangePassword';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import UserProfile from './pages/UserProfile';
-import WishList from './pages/WishList';
 import SalesReport from './pages/SalesReport';
 import Footer from './components/Footer';
+import WishList from './pages/WishList';
 
 function App() {
   const location = useLocation();

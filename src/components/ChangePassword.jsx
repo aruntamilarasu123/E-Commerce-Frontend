@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const ChangePassword = () => {
   const [form, setForm] = useState({ currentPassword: '', newPassword: '' });
@@ -32,6 +34,7 @@ const ChangePassword = () => {
       // Navigate immediately if successful
       if (res.data.message.toLowerCase().includes('success')) {
         navigate(`/${role}`);
+        toast.success('Password Changed successful')
       }
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Server error';

@@ -80,6 +80,7 @@ function ProductCart() {
       });
       const updatedCart = await res.json();
       if (res.ok) setCart(updatedCart);
+      location.reload();
     } catch (err) {
       console.error('Failed to remove item:', err.message);
     }
@@ -151,7 +152,7 @@ const handlePlaceOrder = async () => {
       key,
       amount: createData.order.amount,          
       currency: createData.order.currency,
-      name: 'Your Store',
+      name: 'Arindra',
       description: 'Order Payment',
       order_id: createData.order.id,
       handler: async function (response) {

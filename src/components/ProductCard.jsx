@@ -2,6 +2,8 @@ import React from 'react';
 import { FaRegStar, FaStar, FaStarHalfAlt, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
+import { toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const ProductCard = ({ product, hideWishlist = false }) => {
   const navigate = useNavigate();
@@ -17,10 +19,12 @@ const ProductCard = ({ product, hideWishlist = false }) => {
     e.stopPropagation();
     if (isInWishlist(product._id)) {
       await removeFromWishlist(product._id);
+      toast.success('Removed from wishlist'); 
     } else {
       const status = await addToWishlist(product._id);
-      if (status === 'exists') alert('Already in wishlist!');
-      else if (status !== 'added') alert('Something went wrong!');
+      if (status === 'exists') toast.warning('Already in wishlist!'); 
+      else if (status === 'added') toast.success('Added to wishlist'); 
+      else toast.error('Something went wrong!');
     }
   };
 

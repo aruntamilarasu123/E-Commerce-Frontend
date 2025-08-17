@@ -66,10 +66,12 @@ const ReuseNavbar = () => {
     <>
       {showUserButtons && (
         <div
-          className={`flex flex-col ${isMobile ? "gap-2" : "md:flex-row md:gap-4"} `}
+          className={`flex flex-col ${isMobile ? "gap-2" : "md:flex-row md:gap-4"
+            } `}
         >
           {showCartAndOrder && (
             <>
+              <Link to={`/${role}`} className="nav-link">Home</Link>
               <Link to="/buyer/wishlist" className="nav-link">
                 Wishlist
               </Link>
@@ -80,6 +82,9 @@ const ReuseNavbar = () => {
                 Orders
               </Link>
             </>
+          )}
+          {showOrderManagement && (
+            <Link to={`/${role}`} className="nav-link">Home</Link>
           )}
           {showOrderManagement && (
             <Link to="/seller/order" className="nav-link">
@@ -101,9 +106,8 @@ const ReuseNavbar = () => {
             </button>
             {dropdownOpen && (
               <div
-                className={`absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-2 z-50 ${
-                  isMobile ? "relative mt-0" : ""
-                }`}
+                className={`absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-lg shadow-md py-2 z-50 ${isMobile ? "relative mt-0" : ""
+                  }`}
               >
                 <div
                   onClick={() => {
@@ -135,17 +139,20 @@ const ReuseNavbar = () => {
       )}
 
       {showLoginSignup && (
-        <div className={`flex flex-col ${isMobile ? "gap-2" : "md:flex-row md:gap-3"}`}>
+        <div
+          className={`flex flex-col ${isMobile ? "gap-2" : "md:flex-row md:gap-3"
+            }`}
+        >
           <Link
             to="/login"
-            className="px-4 py-2 bg-[#ff7f00] hover:bg-orange-600 text-white font-semibold rounded-md shadow-sm text-center"
+            className="px-4 py-2 bg-[#ff7f00] hover:bg-orange-600 focus:ring-2 focus:ring-orange-300 text-white font-semibold rounded-lg shadow text-center transition"
             onClick={() => isMobile && setMobileMenuOpen(false)}
           >
             Login
           </Link>
           <Link
             to="/signup"
-            className="px-4 py-2 bg-[#ff7f00] hover:bg-orange-600 text-white font-semibold rounded-md shadow-sm text-center"
+            className="px-4 py-2 bg-[#ff7f00] hover:bg-orange-600 focus:ring-2 focus:ring-orange-300 text-white font-semibold rounded-lg shadow text-center transition"
             onClick={() => isMobile && setMobileMenuOpen(false)}
           >
             Signup
@@ -156,16 +163,18 @@ const ReuseNavbar = () => {
   );
 
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-md relative">
+    <nav className="bg-white border-b border-gray-200 shadow-sm relative">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
           <img
             src="/Cart2.png"
             alt="Arindra Logo"
-            className="w-10 h-10 object-cover rounded-xl shadow-md"
+            className="w-10 h-10 object-cover rounded-lg shadow"
           />
-          <h1 className="text-2xl font-bold text-[#ff7f00] tracking-tight">Arindra</h1>
+          <h1 className="text-2xl font-bold text-[#ff7f00] tracking-wide">
+            Arindra
+          </h1>
         </div>
 
         {/* Desktop Search + Filter */}
@@ -174,7 +183,7 @@ const ReuseNavbar = () => {
             <SearchBox onSearch={handleSearch} />
             <button
               onClick={() => setFilterOpen(!filterOpen)}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg border transition"
             >
               <FaFilter />
               <span>Filter</span>
@@ -198,20 +207,20 @@ const ReuseNavbar = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden px-4 pb-4 flex flex-col gap-3 bg-white border-t border-gray-200 shadow-md">
+        <div className="md:hidden px-4 pb-4 flex flex-col gap-3 bg-white border-t border-gray-200 shadow-sm">
           {showSearchBar && <SearchBox onSearch={handleSearch} />}
           <NavButtons isMobile={true} />
 
           {/* Mobile Filter Dropdown */}
           <button
             onClick={() => setFilterOpen(!filterOpen)}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md mt-2"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg border mt-2 transition"
           >
             <FaFilter />
             <span>Filter</span>
           </button>
           {filterOpen && (
-            <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 mt-2">
+            <div className="bg-white border border-gray-200 rounded-lg shadow-md p-4 mt-2 max-h-[70vh] overflow-y-auto">
               <h3 className="text-lg font-semibold mb-3">Filters</h3>
               <input
                 type="text"
@@ -248,7 +257,7 @@ const ReuseNavbar = () => {
               </select>
               <button
                 onClick={handleFilterApply}
-                className="w-full bg-[#ff7f00] hover:bg-orange-600 text-white font-semibold py-2 rounded-md"
+                className="w-full bg-[#ff7f00] hover:bg-orange-600 focus:ring-2 focus:ring-orange-300 text-white font-semibold py-2 rounded-lg transition"
               >
                 Apply
               </button>
@@ -259,7 +268,7 @@ const ReuseNavbar = () => {
 
       {/* Desktop Filter Dropdown */}
       {filterOpen && !mobileMenuOpen && (
-        <div className="absolute right-10 top-16 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
+        <div className="absolute right-10 top-16 w-64 bg-white border border-gray-100 rounded-lg shadow-md p-4 z-50">
           <h3 className="text-lg font-semibold mb-3">Filters</h3>
           <input
             type="text"
@@ -296,7 +305,7 @@ const ReuseNavbar = () => {
           </select>
           <button
             onClick={handleFilterApply}
-            className="w-full bg-[#ff7f00] hover:bg-orange-600 text-white font-semibold py-2 rounded-md"
+            className="w-full bg-[#ff7f00] hover:bg-orange-600 focus:ring-2 focus:ring-orange-300 text-white font-semibold py-2 rounded-lg transition"
           >
             Apply
           </button>

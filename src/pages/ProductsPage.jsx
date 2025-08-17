@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import ProductForm from '../components/ProductForm';
 import { MyContext } from '../context/ContextProvider';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; 
 
 function ProductsPage() {
   const { data, fetchProducts, totalPages, loading } = useContext(MyContext);
@@ -33,10 +35,10 @@ function ProductsPage() {
       });
 
       if (!response.ok) throw new Error('Delete failed');
-      alert('Product deleted successfully!');
+      toast.success('Product deleted successfully!');
       fetchProducts({ page: currentPage, limit: productsPerPage });
     } catch (err) {
-      alert('Error deleting product');
+      toast.error('Error deleting product');
     }
   };
 

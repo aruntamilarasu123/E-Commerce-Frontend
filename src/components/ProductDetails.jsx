@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import { useWishlist } from "../context/WishlistContext";
 import { MyContext } from "../context/ContextProvider";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const ProductDetails = () => {
   const { role, id } = useParams(); // URL param
@@ -69,8 +71,8 @@ const ProductDetails = () => {
       await removeFromWishlist(product.id);
     } else {
       const status = await addToWishlist(product.id);
-      if (status === "exists") alert("Already in wishlist!");
-      else if (status !== "added") alert("Failed to update wishlist.");
+      if (status === "exists") toast.warning("Already in wishlist!");
+      else if (status !== "added") toast.error("Failed to update wishlist.");
     }
   };
 
@@ -93,10 +95,10 @@ const ProductDetails = () => {
       });
       const cartData = await updatedCart.json();
       setCart(cartData);
-      alert("Product added to cart!");
+      toast.success("Product added to cart!");
     } catch (error) {
       console.error(error);
-      alert("Failed to add to cart");
+      toast.error("Failed to add to cart");
     }
   };
 
@@ -141,10 +143,10 @@ const ProductDetails = () => {
       });
 
       setReviewState({ rating: 0, comment: "" });
-      alert(result.message);
+      toast.success(result.message);
     } catch (error) {
       console.error(error);
-      alert(error.message || "Failed to submit review");
+      toast.error(error.message || "Failed to submit review");
     } finally {
       setSubmitting(false);
     }

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const statusColors = {
   pending: 'bg-yellow-200 text-yellow-800',
@@ -54,7 +56,7 @@ function BuyerOrders() {
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(data.message || 'Failed to cancel order');
+        toast.error(data.message || 'Failed to cancel order');
       } else {
         setOrders((prev) =>
           prev.map((o) =>
@@ -65,7 +67,7 @@ function BuyerOrders() {
         );
       }
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
     setCancelling(null);
   };

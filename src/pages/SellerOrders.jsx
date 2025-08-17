@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; 
 
 // Status badge styles
 const statusColors = {
@@ -82,7 +84,7 @@ function SellerOrders() {
       );
     } catch (err) {
       console.error("Failed to update order status", err);
-      alert("Failed to update order status");
+      toast.error("Failed to update order status");
     }
   };
 
@@ -104,7 +106,7 @@ function SellerOrders() {
       );
     } catch (err) {
       console.error("Failed to mark COD order as paid", err);
-      alert("Failed to mark COD order as paid");
+      toast.error("Failed to mark COD order as paid");
     }
   };
 

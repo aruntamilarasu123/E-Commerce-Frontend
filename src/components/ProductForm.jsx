@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; 
 
 function ProductForm({ onClose, product }) {
   const isEditing = !!product;
@@ -42,11 +44,11 @@ function ProductForm({ onClose, product }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    if (!token) return alert('You must be logged in.');
+    if (!token) return toast.warning('You must be logged in.');
 
     const { name, description, price, stock, category, images } = formData;
     if (!name || !description || !price || !stock || !category || (!isEditing && images.length === 0)) {
-      return alert('Please fill all fields and upload at least one image.');
+      return toast.warning('Please fill all fields and upload at least one image.');
     }
 
     const data = new FormData();
@@ -69,10 +71,10 @@ function ProductForm({ onClose, product }) {
         body: data,
       });
       if (!res.ok) throw new Error('Failed to save product');
-      alert(`Product ${isEditing ? 'updated' : 'created'} successfully!`);
+      toast.success(`Product ${isEditing ? 'updated' : 'created'} successfully!`);
       location.reload();
     } catch (err) {
-      alert(`Failed to ${isEditing ? 'update' : 'create'} product`);
+      toast.error(`Failed to ${isEditing ? 'update' : 'create'} product`);
       console.error(err);
     }
   };

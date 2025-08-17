@@ -21,6 +21,7 @@ import UserProfile from './pages/UserProfile';
 import SalesReport from './pages/SalesReport';
 import Footer from './components/Footer';
 import WishList from './pages/Wishlist';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const location = useLocation();
@@ -69,7 +70,7 @@ function App() {
         <Route path="/seller/order" element={<SellerOrders />} />
         <Route path="/seller/sales-report" element={<SalesReport />} />
       </Routes>
-
+      <ToastContainer position="bottom-right" autoClose={3000} theme="colored" />
       {showFooter && <Footer />}
     </div>
   );
